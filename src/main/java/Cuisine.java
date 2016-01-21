@@ -17,6 +17,7 @@ public class Cuisine {
     return mType;
   }
 
+
   @Override
   public boolean equals(Object otherCuisine){
     if (!(otherCuisine instanceof Cuisine)) {
@@ -31,43 +32,57 @@ public class Cuisine {
   //CREATE
   public void save() {
     try (Connection con = DB.sql2o.open()) {
-      /******************************************************
-        Students: TODO: Create sql query and execute update
-      *******************************************************/
+      String sql = "INSERT INTO cuisine(type) VALUES (:type)";
+      this.mId = (int) con.createQuery(sql, true)
+        .addParameter("type", this.mType)
+        .executeUpdate()
+        .getKey();
     }
   }
 
   //READ
   public static List<Cuisine> all() {
+    String sql = "SELECT id AS mId, type AS mType FROM cuisine";
     try (Connection con = DB.sql2o.open()) {
-      /******************************************************
-        Students: TODO: Create sql query and execute update
-      *******************************************************/
+      return con.createQuery(sql).executeAndFetch(Cuisine.class);
     }
   }
+
+  //FIND
+  public static Cuisine find(int id) {
+    try (Connection con = DB.sql2o.open()) {
+      String sql = "SELECT id AS mId, type AS mType FROM cuisine WHERE id=:id";
+      Cuisine myCuisine = con.createQuery(sql)
+        .addParameter("id", id)
+        .executeAndFetchFirst(Cuisine.class);
+      return myCuisine;
+    }
+  }
+
 
   //UPDATE
   public void update(String newType) {
     this.mType = newType;
     try(Connection con = DB.sql2o.open()) {
-      /******************************************************
-        Students: TODO: Create sql query and execute update
-      *******************************************************/
+      String sql = "UPDATE cuisine SET type = :newType WHERE id = :id";
+      con.createQuery(sql)
+        .addParameter("newType", newType)
+        .addParameter("id", this.mId)
+        .executeUpdate();
     }
   }
 
-  public void delete() {
-    try(Connection con = DB.sql2o.open()) {
-      /******************************************************
-        Students: TODO: Create sql query and execute update
-      *******************************************************/
-    }
-  }
-
-  /******************************************************
-    Students:
-    TODO: Create find method
-    TODO: Create method to get restaurants
-  *******************************************************/
+  // public void delete() {
+  //   try(Connection con = DB.sql2o.open()) {
+  //     /******************************************************
+  //       Students: TODO: Create sql query and execute update
+  //     *******************************************************/
+  //   }
+  // }
+  //
+  // /******************************************************
+  //   Students:
+  //   TODO: Create method to get restaurants
+  // *******************************************************/
 
 }

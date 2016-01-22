@@ -46,51 +46,50 @@ public class Restaurant {
     }
   }
 
-  // //READ
-  // public static List<Cuisine> all() {
-  //   String sql = "SELECT id AS mId, type AS mType FROM cuisine";
-  //   try (Connection con = DB.sql2o.open()) {
-  //     return con.createQuery(sql).executeAndFetch(Cuisine.class);
-  //   }
-  // }
+  //READ
+  public static List<Restaurant> all() {
+    String sql = "SELECT id AS mId, name AS mName, cuisine_id AS mCuisineId FROM restaurants";
+    try (Connection con = DB.sql2o.open()) {
+      return con.createQuery(sql).executeAndFetch(Restaurant.class);
+    }
+  }
 
-  // //FIND
-  // public static Cuisine find(int id) {
-  //   try (Connection con = DB.sql2o.open()) {
-  //     String sql = "SELECT id AS mId, type AS mType FROM cuisine WHERE id=:id";
-  //     Cuisine myCuisine = con.createQuery(sql)
-  //       .addParameter("id", id)
-  //       .executeAndFetchFirst(Cuisine.class);
-  //     return myCuisine;
-  //   }
-  // }
-  //
-  //
-  // //UPDATE
-  // public void update(String newType) {
-  //   this.mType = newType;
-  //   try(Connection con = DB.sql2o.open()) {
-  //     String sql = "UPDATE cuisine SET type = :newType WHERE id = :id";
-  //     con.createQuery(sql)
-  //       .addParameter("newType", newType)
-  //       .addParameter("id", this.mId)
-  //       .executeUpdate();
-  //   }
-  // }
-  //
-  // //DELETE
-  // public void delete() {
-  //   try(Connection con = DB.sql2o.open()) {
-  //     String sql = "DELETE FROM cuisine WHERE id = :id";
-  //     con.createQuery(sql)
-  //       .addParameter("id", this.mId)
-  //       .executeUpdate();
-  //   }
-  // }
+  //FIND
+  public static Restaurant find(int id) {
+    try (Connection con = DB.sql2o.open()) {
+      String sql = "SELECT id AS mId, name AS mName, cuisine_id AS mCuisineId FROM restaurants WHERE id=:id";
+      Restaurant myRestaurant = con.createQuery(sql)
+        .addParameter("id", id)
+        .executeAndFetchFirst(Restaurant.class);
+      return myRestaurant;
+    }
+  }
 
-//   /******************************************************
-//     Students:
-//     TODO: Create method to get cuisine type
-//   *******************************************************/
+  //UPDATE
+  public void update(String newName) {
+    this.mName = newName;
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "UPDATE restaurants SET name = :newName WHERE id = :id";
+      con.createQuery(sql)
+        .addParameter("newName", newName)
+        .addParameter("id", this.mId)
+        .executeUpdate();
+    }
+  }
+
+  //DELETE
+  public void delete() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "DELETE FROM restaurants WHERE id = :id";
+      con.createQuery(sql)
+        .addParameter("id", this.mId)
+        .executeUpdate();
+    }
+  }
+
+  //GET CUISINE TYPE
+  public String getCuisineType() {
+    return Cuisine.find(mCuisineId).getType();
+  }
 
 }

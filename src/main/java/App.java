@@ -34,6 +34,26 @@ public class App {
       model.put("template", "templates/index.vtl");
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
+
+    get("/cuisines", (request, reponse) -> {
+      HashMap<String, Object> model = new HashMap<String, Object>();
+      model.put("cuisines", Cuisine.all());
+      model.put("restaurants", Restaurant.all());
+      model.put("template", "templates/cuisines.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    get("/index/:id", (request, response) -> {
+      HashMap<String, Object> model = new HashMap<String, Object>();
+      Restaurant restaurant = Restaurant.find(Integer.parseInt(request.params(":id")));
+      model.put("restaurant", restaurant);
+      model.put("template", "templates/restaurant.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+
+
+
   //
   //   /******************************************************
   //   STUDENTS:

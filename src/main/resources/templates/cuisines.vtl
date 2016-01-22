@@ -1,0 +1,19 @@
+#foreach ($cuisine in $cuisines)
+  <table class="table table-hover sortable" id="$cuisine.getType()">
+    <thead>
+      <tr>
+        <th>$cuisine.getType()</th>
+      </tr>
+    </thead>
+    <tbody>
+        #foreach ($restaurant in $restaurants)
+      <tr>
+          #if ($restaurant.getCuisineType().equals($cuisine.getType()))
+        <td><a href="/index/$restaurant.getId()">$restaurant.getName()</a></td>
+      </tr>
+          #end
+        #end
+    </tbody>
+  </table>
+  <br>
+#end

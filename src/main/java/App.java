@@ -17,14 +17,23 @@ public class App {
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 
-  //   /******************************************************
-  //   Students: TODO: Create page to add a new restaurant
-  //   *******************************************************/
-  //   get("/new-restaurant", (request, reponse) -> {
-  //     HashMap<String, Object> model = new HashMap<String, Object>();
-  //     model.put("template", "templates/newrestaurant.vtl");
-  //     return new ModelAndView(model, layout);
-  //   }, new VelocityTemplateEngine());
+    get("/newrestaurant", (request, reponse) -> {
+      HashMap<String, Object> model = new HashMap<String, Object>();
+      model.put("cuisines", Cuisine.all());
+      model.put("template", "templates/newrestaurant.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    post("/", (request, response) -> {
+      HashMap<String, Object> model = new HashMap<String, Object>();
+      String newRestaurantName = request.queryParams("newRestaurantName");
+      int newRestaurantCuisineId = Integer.parseInt(request.queryParams("newRestaurantCuisineId"));
+      Restaurant newRestaurant = new Restaurant(newRestaurantName, newRestaurantCuisineId);
+      newRestaurant.save();
+      model.put("restaurants", Restaurant.all());
+      model.put("template", "templates/index.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
   //
   //   /******************************************************
   //   STUDENTS:
